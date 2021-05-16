@@ -110,8 +110,13 @@ def input_ready(number_of_blocks, b, h, cur_shift):
 
     # Insert penalty at each block where H is more than b
     for block in range(1, number_of_blocks + 1):
-        
-
+        if b[(block, cur_shift)] < h[(block, cur_shift)]:
+            diff = h[(block, cur_shift)] - b[(block, cur_shift)]
+            penalty_dict[block] = min(diff, penalty)
+            penalty -= min(diff, penalty)
+            if penalty <= 0:
+                break
+    return False, penalty_dict
 
 def sub_penalty_cranes_from_h(h, penalty, cur_shift):
     """
